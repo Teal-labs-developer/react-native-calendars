@@ -40,7 +40,7 @@ interface Props extends CalendarProps, Omit<FlatListProps<any>, 'data' | 'render
     onLayout?: (event: LayoutChangeEvent) => void;
     removeClippedSubviews?: boolean;
     /** Control number of columns */
-    numberOfColumn: number;
+    numberOfColumn?: number;
 }
 export declare type CalendarListProps = Props;
 declare type XDateAndBump = XDate & {
@@ -105,7 +105,6 @@ declare class CalendarList extends Component<Props, State> {
         initialDate: PropTypes.Requireable<string>;
         minDate: PropTypes.Requireable<string>;
         maxDate: PropTypes.Requireable<string>;
-        /** Whether to use static header that will not scroll with the list (horizontal only) */
         markedDates: PropTypes.Requireable<object>;
         hideExtraDays: PropTypes.Requireable<boolean>;
         showSixWeeks: PropTypes.Requireable<boolean>;

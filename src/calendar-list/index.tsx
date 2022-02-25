@@ -58,7 +58,7 @@ interface Props extends CalendarProps, Omit<FlatListProps<any>, 'data' | 'render
   onLayout?: (event: LayoutChangeEvent) => void;
   removeClippedSubviews?: boolean;
   /** Control number of columns */
-  numberOfColumn: number;
+  numberOfColumn?: number;
 }
 export type CalendarListProps = Props;
 
