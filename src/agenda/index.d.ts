@@ -87,6 +87,7 @@ export default class Agenda extends Component<AgendaProps, State> {
         keyboardShouldPersistTaps: PropTypes.Requireable<string>;
         onEndReachedThreshold: PropTypes.Requireable<number>;
         onEndReached: PropTypes.Requireable<(...args: any[]) => any>;
+        numberOfColumn: PropTypes.Requireable<number>;
         firstDay: PropTypes.Requireable<number>;
         displayLoadingIndicator: PropTypes.Requireable<boolean>;
         showWeekNumbers: PropTypes.Requireable<boolean>;

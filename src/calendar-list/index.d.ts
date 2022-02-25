@@ -3,7 +3,7 @@ import XDate from 'xdate';
 import React, { Component } from 'react';
 import { FlatList, ViewStyle, LayoutChangeEvent, FlatListProps } from 'react-native';
 import { CalendarProps } from '../calendar';
-export interface CalendarListProps extends CalendarProps, Omit<FlatListProps<any>, 'data' | 'renderItem'> {
+interface Props extends CalendarProps, Omit<FlatListProps<any>, 'data' | 'renderItem'> {
     /** Max amount of months allowed to scroll to the past. Default = 50 */
     pastScrollRange?: number;
     /** Max amount of months allowed to scroll to the future. Default = 50 */
@@ -39,8 +39,10 @@ export interface CalendarListProps extends CalendarProps, Omit<FlatListProps<any
     /** onLayout event */
     onLayout?: (event: LayoutChangeEvent) => void;
     removeClippedSubviews?: boolean;
-    testID?: string;
+    /** Control number of columns */
+    numberOfColumn: number;
 }
+export declare type CalendarListProps = Props;
 declare type XDateAndBump = XDate & {
     propBump?: number;
 };
@@ -55,36 +57,55 @@ declare type State = {
  * @extends: Calendar
  * @extendslink: docs/Calendar
  * @example: https://github.com/wix/react-native-calendars/blob/master/example/src/screens/calendarsList.js
- * @gif: https://github.com/wix/react-native-calendars/blob/master/demo/assets/calendar-list.gif
+ * @gif: https://github.com/wix/react-native-calendars/blob/master/demo/calendar-list.gif
  */
-declare class CalendarList extends Component<CalendarListProps, State> {
+declare class CalendarList extends Component<Props, State> {
     static displayName: string;
     static propTypes: {
+        /** Max amount of months allowed to scroll to the past. Default = 50 */
         pastScrollRange: PropTypes.Requireable<number>;
+        /** Max amount of months allowed to scroll to the future. Default = 50 */
         futureScrollRange: PropTypes.Requireable<number>;
+        /** Used when calendar scroll is horizontal, default is device width, pagination should be disabled */
         calendarWidth: PropTypes.Requireable<number>;
+        /** Dynamic calendar height */
         calendarHeight: PropTypes.Requireable<number>;
+        /** Style for the List item (the calendar) */
         calendarStyle: PropTypes.Requireable<number | object>;
+        /** Whether to use static header that will not scroll with the list (horizontal only) */
         staticHeader: PropTypes.Requireable<boolean>;
+        /** Enable or disable vertical / horizontal scroll indicator. Default = false */
         showScrollIndicator: PropTypes.Requireable<boolean>;
+        /** Whether to animate the auto month scroll */
         animateScroll: PropTypes.Requireable<boolean>;
+        /** Enable or disable scrolling of calendar list */
         scrollEnabled: PropTypes.Requireable<boolean>;
+        /** When true, the calendar list scrolls to top when the status bar is tapped. Default = true */
         scrollsToTop: PropTypes.Requireable<boolean>;
+        /** Enable or disable paging on scroll */
         pagingEnabled: PropTypes.Requireable<boolean>;
+        /** Whether the scroll is horizontal */
         horizontal: PropTypes.Requireable<boolean>;
+        /** Should Keyboard persist taps */
         keyboardShouldPersistTaps: PropTypes.Requireable<string>;
+        /** A custom key extractor for the generated calendar months */
         keyExtractor: PropTypes.Requireable<(...args: any[]) => any>;
+        /** How far from the end to trigger the onEndReached callback */
         onEndReachedThreshold: PropTypes.Requireable<number>;
+        /** Called once when the scroll position gets within onEndReachedThreshold */
         onEndReached: PropTypes.Requireable<(...args: any[]) => any>;
+        /** Control number of columns */
+        numberOfColumn: PropTypes.Requireable<number>;
         theme: PropTypes.Requireable<object>;
         firstDay: PropTypes.Requireable<number>;
         displayLoadingIndicator: PropTypes.Requireable<boolean>;
-        showWeekNumbers: PropTypes.Requireable<boolean>;
+        showWeekNumbers: PropTypes.Requireable<boolean>; /** Dynamic calendar height */
         style: PropTypes.Requireable<number | object>;
         current: PropTypes.Requireable<string>;
         initialDate: PropTypes.Requireable<string>;
         minDate: PropTypes.Requireable<string>;
         maxDate: PropTypes.Requireable<string>;
+        /** Whether to use static header that will not scroll with the list (horizontal only) */
         markedDates: PropTypes.Requireable<object>;
         hideExtraDays: PropTypes.Requireable<boolean>;
         showSixWeeks: PropTypes.Requireable<boolean>;
@@ -133,15 +154,16 @@ declare class CalendarList extends Component<CalendarListProps, State> {
         scrollEnabled: boolean;
         removeClippedSubviews: boolean;
         keyExtractor: (_: any, index: number) => string;
+        numberOfColumn: number;
     };
     style: any;
     list: React.RefObject<FlatList>;
     viewabilityConfig: {
         itemVisiblePercentThreshold: number;
     };
-    constructor(props: CalendarListProps);
-    componentDidUpdate(prevProps: CalendarListProps): void;
-    static getDerivedStateFromProps(_: CalendarListProps, prevState: State): {
+    constructor(props: Props);
+    componentDidUpdate(prevProps: Props): void;
+    static getDerivedStateFromProps(_: Props, prevState: State): {
         rows: (string | XDate)[];
     };
     scrollToDay(d: XDate, offset: number, animated: boolean): void;
@@ -153,7 +175,7 @@ declare class CalendarList extends Component<CalendarListProps, State> {
     };
     getMonthIndex(month: XDate): number;
     addMonth: (count: number) => void;
-    updateMonth(day: XDate): void;
+    updateMonth(day: XDate, doNotTriggerListeners?: boolean): void;
     onViewableItemsChanged: ({ viewableItems }: any) => void;
     renderItem: ({ item }: any) => JSX.Element;
     renderStaticHeader(): JSX.Element | undefined;
