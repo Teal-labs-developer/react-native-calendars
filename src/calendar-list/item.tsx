@@ -7,10 +7,9 @@ import {Text, View} from 'react-native';
 
 import {Theme} from '../types';
 import {extractComponentProps} from '../componentUpdater';
-import {formatNumbers, sameMonth} from '../dateutils';
+import {formatNumbers} from '../dateutils';
 import Calendar, {CalendarProps} from '../calendar';
 import styleConstructor from './style';
-import {getCalendarDateString} from '../services';
 
 export type CalendarListItemProps = CalendarProps & {
   item: any;
@@ -27,7 +26,7 @@ type CalendarListItemState = {
 };
 
 class CalendarListItem extends Component<CalendarListItemProps, CalendarListItemState> {
-  static displayName = 'CalendarListItem';
+  static displayName = 'IGNORE';
 
   static propTypes = {
     ...Calendar.propTypes,
@@ -54,7 +53,7 @@ class CalendarListItem extends Component<CalendarListItemProps, CalendarListItem
     const r1 = this.props.item;
     const r2 = nextProps.item;
 
-    return !sameMonth(r1, r2) || !!(r2.propBump && r2.propBump !== r1.propBump);
+    return r1.toString('yyyy MM') !== r2.toString('yyyy MM') || !!(r2.propBump && r2.propBump !== r1.propBump);
   }
 
   onPressArrowLeft = (_: any, month: any) => {
@@ -111,17 +110,19 @@ class CalendarListItem extends Component<CalendarListItemProps, CalendarListItem
 
     if (item.getTime) {
       return (
-        <Calendar
-          {...calendarProps}
-          testID={testID}
-          current={getCalendarDateString(item.toString())}
-          style={calStyle}
-          headerStyle={horizontal ? headerStyle : undefined}
-          disableMonthChange
-          onPressArrowLeft={horizontal ? this.onPressArrowLeft : onPressArrowLeft}
-          onPressArrowRight={horizontal ? this.onPressArrowRight : onPressArrowRight}
-          context={context}
-        />
+        <View style={this.style.calendarContainer}>
+          <Calendar
+            {...calendarProps}
+            testID={testID}
+            current={item}
+            style={calStyle}
+            headerStyle={horizontal ? headerStyle : undefined}
+            disableMonthChange
+            onPressArrowLeft={horizontal ? this.onPressArrowLeft : onPressArrowLeft}
+            onPressArrowRight={horizontal ? this.onPressArrowRight : onPressArrowRight}
+            context={context}
+          />
+        </View>
       );
     } else {
       const text = formatNumbers(item.toString());
